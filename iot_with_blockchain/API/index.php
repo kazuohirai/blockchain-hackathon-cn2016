@@ -94,6 +94,7 @@ function parseRootOdin($rootOdinSegment){
 }
 
 //For parsing extra ODIN
+//In future , we would like to use FACTOM or ethereum for storing extra ODINs.
 function parseExtOdin($parentOdin,$extOdinSegment){
     $result_data=array();
     $result_data['status']='OK';
