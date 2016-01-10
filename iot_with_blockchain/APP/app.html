@@ -45,7 +45,7 @@
 </script>
 <script type="text/javascript">
 //The wifi ssid list for testing
-var g_arrayWifiSsidQueue=['ppk:/352189.1046/slider_led'];
+var g_arrayWifiSsidQueue=['ppk:/352189.1046/slider_led','OtherDevice2'];
 $("#wifi_list_page").live('pageinit', function() {
     wifiListPageLoaded();
 });
@@ -70,13 +70,18 @@ function genWifiItemHtml(item_sn,wifi_record)
 {
 	var object_logo_url='media/images/activity.png';
     var view_object_url;//'http://192.168.43.29:8080/obj/slider/index.html?obj=sliderlC9gss06tsaq&pos=led';
-    alert("/AP/?odin="+encodeURIComponent(wifi_record));
-    $.get("/AP/?odin="+encodeURIComponent(wifi_record),function(data,status){
-        alert("Data: " + data + "\nStatus: " + status);
-    });
     
-    var view_object_url= 'http://192.168.43.29:8080/obj/slider/index.html?obj=sliderlC9gss06tsaq&pos=led';
+    var objectDataText = $.ajax({ url: "/AP/?odin="+encodeURIComponent(wifi_record), async: false }).responseText; 
+    //alert("Data: " + objectDataText + "\nStatus: " + status);
+    var objectData=eval('(' + objectDataText + ')'); 
+    
+    if(objectData['status']=='OK'){
+        var objectContent=eval('(' + objectData['content'] + ')'); ;
+        var view_object_url= objectContent['ap_list'][0];
+    } else {
+        var view_object_url='#Invalid object access point!';
         
+    }
     return '<li><a href="'+view_object_url+'" target="_top" data-rel="external" > \
 		<img src="'+object_logo_url+'" width="150" height="150" />  \
 		<h3>'+wifi_record+'</h3> \
