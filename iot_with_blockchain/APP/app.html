@@ -66,10 +66,11 @@ function wifiListPageLoaded()
     $('#wifi_list').trigger( "updatelayout");
 }
 
+//To get the info of the smart thing by ODIN parsing service
 function genWifiItemHtml(item_sn,wifi_record)
 {
 	var object_logo_url='media/images/activity.png';
-    var view_object_url;//'http://192.168.43.29:8080/obj/slider/index.html?obj=sliderlC9gss06tsaq&pos=led';
+    var view_object_url;
     
     var objectDataText = $.ajax({ url: "/AP/?odin="+encodeURIComponent(wifi_record), async: false }).responseText; 
     //alert("Data: " + objectDataText + "\nStatus: " + status);
@@ -77,9 +78,10 @@ function genWifiItemHtml(item_sn,wifi_record)
     
     if(objectData['status']=='OK'){
         var objectContent=eval('(' + objectData['content'] + ')'); ;
-        var view_object_url= objectContent['ap_list'][0];
+        view_object_url= objectContent['ap_list'][0];
     } else {
-        var view_object_url='#Invalid object access point!';
+        view_object_url='#Invalid object access point!';
+        object_logo_url='media/images/activity.png';
         
     }
     return '<li><a href="'+view_object_url+'" target="_top" data-rel="external" > \
